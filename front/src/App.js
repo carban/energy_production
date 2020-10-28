@@ -20,7 +20,8 @@ const App = () => {
 
     profit: 0,
     sol: [],
-    loading: false
+    loading: false,
+    unsatisfiable: false,
   }
 
   const [values, setValues] = useState(initialState);
@@ -68,8 +69,13 @@ const App = () => {
     setValues({ ...values, loading: true, profit: 0, sol: [] });
     axios.post("http://localhost:3030/api/solve/model1/", data)
       .then(res => {
-        let { profit, sol } = res.data;
-        setValues({ ...values, profit: profit, sol: sol, loading: false });
+        let { status } = res.data;
+        if (status) {
+          let { profit, sol } = res.data;
+          setValues({ ...values, profit: profit, sol: sol, loading: false, unsatisfiable: false });
+        } else {
+          setValues({ ...values, profit: 0, sol: [], loading: false, unsatisfiable: true });
+        }
       })
       .catch(err => {
         console.log(err);
@@ -181,6 +187,10 @@ const App = () => {
         <br></br>
         <hr></hr>
         <br></br>
+
+        {
+          values.unsatisfiable ? <h1 style={{ "color": "red" }}>Insatisfactible</h1> : true
+        }
 
         {
           values.sol.length === 0 ?

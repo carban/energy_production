@@ -40,10 +40,10 @@ app.post('/api/solve/model1/', (req, res) => {
                 let f = stdout.split("\n")
                 let profit = parseInt(f[0]);
                 let sol = JSON.parse(f[1]);
-                res.json({ profit: profit, sol: sol });
+                res.json({ status: true, profit: profit, sol: sol });
             } else {
-                console.log('UNSATISFIABLE');
-                res.json({ msg: 'UNSATISFIABLE' });
+                // console.log('UNSATISFIABLE');
+                res.json({ status: false });
             }
         });
     } catch (error) {
