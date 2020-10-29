@@ -25,4 +25,4 @@ constraint f = sum(i in t, j in dias)(pro[i, j] * costos[i]);
 solve minimize f;
 
 % Output
-output["\(f)\n[\(pro[1, dias]),\(pro[2, dias]),\(pro[3, dias])]"];
+output["Total Profit: \(f)\n\(pro[1, dias])\n\(pro[2, dias])\n\(pro[3, dias])"];

@@ -19,10 +19,17 @@ array[t, dias] of var int: pro;
 constraint forall(i in t, j in dias)(pro[i, j] >= 0 /\ pro[i, j] <= capacidades[i]);
 constraint forall(i in dias)(sum(d[clientes, i]) <= sum(pro[t, i]));
 
+% Regimen alto | Restriccion extra ----------------------------------------
+int: limit_dias = 2;
+float: porcentaje = 0.8;
+float: limit = capacidades[2] * porcentaje;
+
+constraint not exists(i in dias, j in dias where j-i+1=limit_dias)(forall(k in i..j)(pro[2,k] >= limit));
+
 % Funcion Objetivo
 var int: f; 
 constraint f = sum(i in t, j in dias)(pro[i, j] * costos[i]);
 solve minimize f;
 
 % Output
-output["\(f)\n[\(pro[1, dias]),\(pro[2, dias]),\(pro[3, dias])]"];
+output["Total Profit: \(f)\n\(pro[1, dias])\n\(pro[2, dias])\n\(pro[3, dias])"];
