@@ -16,13 +16,8 @@ array[clientes, dias] of int: d;
 array[t, dias] of var int: pro;
 
 % Restricciones
-constraint forall(i in t, j in dias)(pro[i, j] > 0 /\ pro[i, j] <= capacidades[i]);
+constraint forall(i in t, j in dias)(pro[i, j] >= 0 /\ pro[i, j] <= capacidades[i]);
 constraint forall(i in dias)(sum(d[clientes, i]) <= sum(pro[t, i]));
-
-% Regimen alto | Restriccion extra ----------------------------------------
-%int: limit_dias = 2;
-%float: porcentaje = 0.8;
-%float: limit = capacidades[2] * porcentaje;
 
 %constraint not exists(i in 1..(n_dias-1))(pro[2, i] >= limit /\ pro[2, i+1] >= limit);
 
