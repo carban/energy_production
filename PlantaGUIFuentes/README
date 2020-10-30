@@ -1,0 +1,5 @@
+Para correr la api
+$ node index.js
+
+Para correr el front
+$ npm run build && serve -s build

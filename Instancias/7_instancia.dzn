@@ -1,0 +1,11 @@
+capacidades = [800, 250, 600];
+costos = [22, 15, 30];
+
+n_clientes = 2;
+n_dias = 5;
+
+d = [|900, 350, 800, 800, 500|
+      900, 900, 900, 900, 0|];
+
+limit_dias = 3;
+porcentaje = 0.6;
