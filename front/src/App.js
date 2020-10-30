@@ -256,9 +256,9 @@ const App = () => {
                           {
                             ele.map((ele2, j) => (
                               <td key={j}>
-                                <Input type="number" placeholder="Gasto"
-                                  value={values.sol[i][j]}
-                                  readOnly />
+                                <center>
+                                  <h5>{values.sol[i][j]}</h5>
+                                </center>
                               </td>
                             ))
                           }
