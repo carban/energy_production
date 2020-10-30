@@ -20,11 +20,11 @@ constraint forall(i in t, j in dias)(pro[i, j] >= 0 /\ pro[i, j] <= capacidades[
 constraint forall(i in dias)(sum(d[clientes, i]) <= sum(pro[t, i]));
 
 % Regimen alto | Restriccion extra ----------------------------------------
-int: limit_dias = 2;
-float: porcentaje = 0.8;
+int: limit_dias;
+float: porcentaje;
 float: limit = capacidades[2] * porcentaje;
 
-constraint not exists(i in dias, j in dias where j-i+1=limit_dias)(forall(k in i..j)(pro[2,k] >= limit));
+constraint not exists(i in dias, j in dias where j-i+1=limit_dias)(forall(k in i..j)(pro[2,k] > limit));
 
 % Funcion Objetivo
 var int: f; 
