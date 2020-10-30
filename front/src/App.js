@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Table, Input, Button } from "reactstrap";
+import { Table, Input, Button, Row, Col } from "reactstrap";
 import ReactLoading from "react-loading";
 import axios from "axios";
 import './App.css';
@@ -17,6 +17,9 @@ const App = () => {
       [800, 300, 100, 230, 500],
       [200, 700, 350, 420, 0]
     ],
+    ldc: 0,
+    proc: 0,
+    model2: false,
 
     profit: 0,
     sol: [],
@@ -64,10 +67,19 @@ const App = () => {
     let dias = "n_dias=" + di + ";";
     let d = trMatrix(values.matrix, cl, di);
 
-    let data = { capacidades, costos, clientes, dias, d };
+    let data = {};
+
+    let model2 = values.model2;
+    if (model2) {
+      let ldc = "limit_dias=" + values.ldc + ";";
+      let porcentaje = "porcentaje=" + values.porc / 100 + ";";
+      data = { capacidades, costos, clientes, dias, d, ldc, porcentaje, model2 };
+    } else {
+      data = { capacidades, costos, clientes, dias, d, model2 };
+    }
 
     setValues({ ...values, loading: true, profit: 0, sol: [] });
-    axios.post("http://localhost:3030/api/solve/model1/", data)
+    axios.post("http://localhost:3030/api/solve/", data)
       .then(res => {
         let { status } = res.data;
         if (status) {
@@ -119,6 +131,10 @@ const App = () => {
     setValues({ ...values, matrix: m });
   }
 
+  const changeModel = () => {
+    setValues({ ...values, model2: !values.model2 });
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -126,17 +142,34 @@ const App = () => {
       </header>
       <div>
         <br></br>
-        <b>Capacidades</b>
+        <Row>
+          <Col>
+            <b>Capacidades</b>
+            <br></br>
+            <input type="number" placeholder="N" name="capaN" value={values.capaN} onChange={handler}></input>
+            <input type="number" placeholder="H" name="capaH" value={values.capaH} onChange={handler}></input>
+            <input type="number" placeholder="T" name="capaT" value={values.capaT} onChange={handler}></input>
+            <br></br>
+          </Col>
+          <Col>
+            <b>Costos</b>
+            <br></br>
+            <input type="number" placeholder="costoN" name="costoN" value={values.costoN} onChange={handler}></input>
+            <input type="number" placeholder="costoH" name="costoH" value={values.costoH} onChange={handler}></input>
+            <input type="number" placeholder="costoT" name="costoT" value={values.costoT} onChange={handler}></input>
+            <br></br>
+          </Col>
+        </Row>
         <br></br>
-        <input type="number" placeholder="N" name="capaN" value={values.capaN} onChange={handler}></input>
-        <input type="number" placeholder="H" name="capaH" value={values.capaH} onChange={handler}></input>
-        <input type="number" placeholder="T" name="capaT" value={values.capaT} onChange={handler}></input>
-        <br></br>
-        <b>Costos</b>
-        <br></br>
-        <input type="number" placeholder="costoN" name="costoN" value={values.costoN} onChange={handler}></input>
-        <input type="number" placeholder="costoH" name="costoH" value={values.costoH} onChange={handler}></input>
-        <input type="number" placeholder="costoT" name="costoT" value={values.costoT} onChange={handler}></input>
+        <button onClick={changeModel}>Parámetros Extra</button>
+        {
+          values.model2 ?
+            <div>
+              <input type="number" placeholder="LDC" name="ldc" onChange={handler}></input>
+              <input type="number" placeholder="Porcentaje" name="porc" onChange={handler}></input>
+            </div>
+            : true
+        }
 
       </div>
       <br></br>

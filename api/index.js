@@ -19,18 +19,23 @@ const server = app.listen(app.get('port'), () => {
 
 const pathMini = "/home/carban/PortableApps/MiniZincIDE-2.4.3-bundle-linux-x86_64/bin/minizinc ";
 const pathModel = path.resolve("model.mzn");
-// const pathModel2 = path.resolve("Model2.mzn");
+const pathModel2 = path.resolve("model2.mzn");
 
 
 // #################################### MODEL 1 ################################
-app.post('/api/solve/model1/', (req, res) => {
+app.post('/api/solve/', (req, res) => {
 
-    const { capacidades, costos, clientes, dias, d } = req.body;
+    const { model2 } = req.body;
 
-    const inpp = ' -D \" ' + capacidades + ' ' + costos + ' ' + clientes + ' ' + dias + ' ' + d + '"';
-
-    var command = '/..' + pathMini + ' --solver COIN-BC ' + pathModel + inpp;
-
+    if (!model2) {
+        const { capacidades, costos, clientes, dias, d } = req.body;
+        const inpp = ' -D \" ' + capacidades + ' ' + costos + ' ' + clientes + ' ' + dias + ' ' + d + '"';
+        var command = '/..' + pathMini + ' --solver COIN-BC ' + pathModel + inpp;
+    } else {
+        const { capacidades, costos, clientes, dias, d, ldc, porcentaje } = req.body;
+        const inpp = ' -D \" ' + capacidades + ' ' + costos + ' ' + clientes + ' ' + dias + ' ' + d + ' ' + ldc + ' ' + porcentaje + '"';
+        var command = '/..' + pathMini + ' --solver COIN-BC ' + pathModel2 + inpp;
+    }
     // console.log(command);
 
     // DIRECTO
